@@ -1,0 +1,10 @@
+what color is the sky, blue, 2
+what is 2 + 7, 9, 1
+what is the color of an apple,red, 1
+what color is the green apple, green,2
+what is 2 + 10, 12, 1
+what is the color of an yellow apple, yellow, 1
+what color is the sea, blue, 5
+what program are we using, pycharm, 10
+what is 2+2, 4, 2
+how many letters are in the alphabet, 26, 1
