@@ -37,8 +37,7 @@ print(numbers)
 #         print(student)
 
 # dict
-students_info = {'12345': student1,
-                 '1234': student2}
+students_info = {'12345': student1, '1234': student2}
 
 print(students_info['1234'])
 
