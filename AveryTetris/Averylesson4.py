@@ -1,7 +1,7 @@
 #NEW: Import math library
 import pygame, math
 from pygame.locals import *
-from tetris_pieces4 import *
+from AveryTetris.tetris_pieces4 import *
 
 pygame.init()
 
@@ -67,6 +67,41 @@ def draw_tetrimino(posX,posY, tetrimino, board_surface):
 def calculate_drop_time(level):
    return math.floor(math.pow((0.8 - ((level - 1) * 0.007)), level-1) * 60)
 
+
+def lock(posX, posY, grid, tetrimino):
+    h = len(tetrimino)
+    w = len(tetrimino[0])
+
+    for y in range(h):
+        for x in range(w):
+
+            tile = tetrimino[y][x]
+            if tile != 0:
+                grid[posY + y][posX + x] = tile
+
+
+def check_and_clear_lines(grid):
+    lines_cleared = 0
+    full_lines = []
+
+    for y, line in enumerate(grid):
+        if 0 not in line:
+            lines_cleared += 1
+            full_lines.append(y)
+
+    if lines_cleared > 0:
+        for y in full_lines:
+            grid.pop(y)
+
+        grid.insert(0, [0 for _ in range(COLS)])
+
+
+
+
+locking = False
+lock_clock = 0
+lock_delay = 30
+
 # NEW: Variables for player information
 level = 1
 score = 0
@@ -105,6 +140,8 @@ while True:
            elif event.type == pygame.KEYDOWN:
                if event.key == pygame.K_RIGHT:
                    active_tetrimino.move(1,0)
+               elif event.key == pygame.K_DOWN:
+                   currentDropTime = baseDropTime // 20
                elif event.key == pygame.K_LEFT:
                    active_tetrimino.move(-1,0)
                elif event.key == pygame.K_UP or event.key == pygame.K_x:
@@ -112,13 +149,35 @@ while True:
                elif event.key == pygame.K_z or event.key == pygame.K_RCTRL:
                    active_tetrimino.rotate(-1)
 
+           elif event.type == pygame.KEYUP:
+               if event.key == pygame.K_DOWN:
+                   currentDropTime = baseDropTime
+
 
        # NEW: Drop clock which indicates how fast the pieces will fall down
        # Increase the drop clock each frame, once we pass current_drop_time, it's time to fall.
        drop_clock += 1
        if drop_clock >= currentDropTime:
-           active_tetrimino.move(0, 1)
+           move = active_tetrimino.move(0, 1)
+           if not move:
+               if not locking:
+                   locking = True
+                   lock_clock = 0
+               else:
+                   locking = False
            drop_clock = 0
+
+       if locking:
+           lock_clock += 1
+           if lock_clock >= lock_delay:
+               lock(active_tetrimino.x, active_tetrimino.y, board,
+                    pieces[active_tetrimino.type][active_tetrimino.rotation])
+               drop_clock = baseDropTime
+               lock_clock = 0
+               locking = False
+               active_tetrimino.reset()
+               check_and_clear_lines(board)
+
 
        # DELETE: active_tetrimino.move(0,1)
        screen.fill(gray)

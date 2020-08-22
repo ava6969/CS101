@@ -124,6 +124,10 @@ class Tetrimino:
        if not self.collision_check(destination_x, destination_y):
            self.x = destination_x
            self.y = destination_y
+           # move succeeded
+           return True
+       # move failed
+       return False
 
    def rotate(self, dr):
        new_rotation = (self.rotation + dr) % len(pieces[self.type])

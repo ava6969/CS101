@@ -1,3 +1,7 @@
-(F_100, L_90)x4
 F_100, L_90, F_100, L_90, F_100, L_90, F_100, L_90
-PC_5, F_50, C_50
+
+# PC = pen color
+# F = forward
+# C = circle with radius 50
+PC_2, F_50, C_50
+(F_100, L_90)x4

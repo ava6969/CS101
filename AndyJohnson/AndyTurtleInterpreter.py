@@ -11,7 +11,7 @@ class AndyTurtleInterpreter:
 
 
     def preprocess_colors(self):
-        color_file = open('colors.txt')
+        color_file = open('../colors.txt')
 
         for line in color_file.readlines():
             line_list = line.strip().split()
